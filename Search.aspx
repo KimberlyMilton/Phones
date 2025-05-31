@@ -15,7 +15,7 @@
             }));
 
             function showPhoneInfo(id) {
-                window.location.href = "inventoryItem?id=" + id;
+                window.location.href = "PhoneInfo?id=" + id;
             }
 
             function validateCurrency() {

@@ -151,5 +151,7 @@ input[type="select"] {
     width:100%
 }
 
-.test{}     
+.nav-link {
+    font-weight: bold;
+}   
 

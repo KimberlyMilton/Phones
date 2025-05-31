@@ -11,7 +11,7 @@ namespace Phones
 {
 
 
-    public partial class About
+    public partial class PhoneInfo
     {
     }
 }

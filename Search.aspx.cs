@@ -27,7 +27,8 @@ namespace Phones
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-              //  e.Row.Attributes.Add("onclick", "showPhoneInfo(" + searchGrd.DataKeys[e.Row.RowIndex].Values["PhoneID"].ToString() + ");");
+                //  e.Row.Attributes.Add("onclick", "showPhoneInfo(" + searchGrd.DataKeys[e.Row.RowIndex].Values["PhoneID"].ToString() + ");");
+                e.Row.Attributes.Add("onclick", "showPhoneInfo("+e.Row.RowIndex+");");
                 e.Row.Attributes.Add("onmouseover", "this.style.cursor=\'pointer\'; this.originalstyle=this.style.backgroundColor; this.style.backgroundColor='#CEF6F5'");
                 e.Row.Attributes.Add("onmouseout", "this.style.backgroundColor = this.originalstyle");
             }
@@ -102,7 +103,7 @@ namespace Phones
 
 
                 this.searchGrd.Visible = true;
-                this.phoneCount.Text = query.Count().ToString() + " Phones found out of "+phoneInventory.Count.ToString()+" Phone Types in Inventory." ;
+                this.phoneCount.Text = query.Count().ToString() + " Phones found out of "+phoneInventory.Count.ToString()+" total phones carried." ;
                 this.phoneCount.Visible = true;
 
             }

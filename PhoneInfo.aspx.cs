@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 
 namespace Phones
 {
-    public partial class About : Page
+    public partial class PhoneInfo : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
