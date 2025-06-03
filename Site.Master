@@ -46,7 +46,8 @@
                 </button>
                 <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Search">Search</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Search">Inventory Search</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/PhoneInfo">Add New Inventory Item</a></li>
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/"  visible="false">View</a></li>
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact" visible="false">Contact</a></li>
                     </ul>
@@ -66,6 +67,8 @@
                             </ul>
                         </LoggedInTemplate>
                     </asp:LoginView>
+
+                   <div class="userName navbar-nav nav-link"> Welcome Manager!</div>
                 </div>
             </div>
         </nav>

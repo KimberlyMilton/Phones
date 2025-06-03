@@ -6,10 +6,12 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Threading;
+using System.Data.Entity.Core.Common.CommandTrees;
 
 namespace Phones
 {
@@ -71,39 +73,42 @@ namespace Phones
         {
             try
             {
-                // ***add` price field validator **** /
-                //** add in multiplpe values seperated by a comma **//
                 List<cellPhone> phoneInventory = importData();
 
-            var query = from cellPhone in phoneInventory
-                        
-                     where 
-                    (this.brand.Text.Length > 0 ? cellPhone.brand.ToLower().Replace(" ", "").Contains(this.brand.Text.ToLower().Trim().Replace(" ", "").ToString()) : true ) &&
-                    (this.model.Text.Length > 0 ? cellPhone.model.ToLower().Replace(" ", "").Contains(this.model.Text.ToLower().Trim().Replace(" ", "").ToString()) : true) &&
-                    (this.storage.Text.Length > 0 ? cellPhone.storage.ToLower().Replace(" ", "").Contains(this.storage.Text.ToLower().Replace(" ", "").Trim().ToString()) : true) &&
-                    (this.color.Text.Length > 0 ? cellPhone.color.ToLower().Replace(" ", "").Contains(this.color.Text.ToLower().Trim().Replace(" ", "").ToString()) : true) &&
-                    ( (this.minPrice.Text.Length > 0 && this.maxPrice.Text.Length < 1) ? cellPhone.price >= Convert.ToDouble(this.minPrice.Text.Replace("$", "").Trim()) : true) && //minprioce but not max price
-                    ( (this.minPrice.Text.Length > 0 && this.maxPrice.Text.Length > 0) ? cellPhone.price >= Convert.ToDouble(this.minPrice.Text.Replace("$", "").Trim()) && cellPhone.price <= Convert.ToDouble(this.maxPrice.Text.Replace("$", "").Trim()) : true) && //min and max price
-                    ( (this.minPrice.Text.Length < 1 && this.maxPrice.Text.Length > 0) ? cellPhone.price <= Convert.ToDouble(this.maxPrice.Text.Replace("$", "").Trim()) : true)  //max price but not min price
+                //take the text entered in the boxes, and create a string list for the comma seperated values
+                
+                string[] brandsEntered =  this.brand.Text.ToLower().Replace(" ","").Trim().TrimEnd(',').TrimStart(',').Split(',');
+                string[] colorsEntered = this.color.Text.ToLower().Replace(" ", "").Trim().TrimEnd(',').TrimStart(',').Split(',');
+                string[] modelsEntered = this.model.Text.ToLower().Replace(" ", "").Trim().TrimEnd(',').TrimStart(',').Split(',');
+                string[] storagesEntered = this.storage.Text.ToLower().Replace(" ", "").Trim().TrimEnd(',').TrimStart(',').Split(',');
+
+                //Build the Query using the lists for the variables. Price will compare based on the min and max boxes entered
+                //also have to check the string length of the textbox because a string array will always have a length of 1/
+                var query = from cellPhoneItem in phoneInventory 
+                     where
+                      ((this.brand.Text.Trim().Length > 0 && brandsEntered.Length > 0) ? (brandsEntered.Any(wordInListEntered => cellPhoneItem.brand.ToLower().Trim().Replace(" ", "").Contains(wordInListEntered))) : true ) &&
+                      ((this.model.Text.Trim().Length > 0 && modelsEntered.Length > 0) ? (modelsEntered.Any(wordInListEntered => cellPhoneItem.model.ToLower().Trim().Replace(" ", "").Contains(wordInListEntered))) : true) &&
+                      ((this.storage.Text.Trim().Length > 0 && storagesEntered.Length > 0 ) ? (storagesEntered.Any(wordInListEntered => cellPhoneItem.storage.ToLower().Trim().Replace(" ", "").Contains(wordInListEntered))) : true) &&
+                      ((this.color.Text.Trim().Length > 0 && colorsEntered.Length > 0 ) ? (colorsEntered.Any(wordInListEntered => cellPhoneItem.color.ToLower().Trim().Replace(" ", "").Contains(wordInListEntered))) : true) &&
+                     ((this.minPrice.Text.Length > 0 && this.maxPrice.Text.Length < 1) ? cellPhoneItem.price >= Convert.ToDouble(this.minPrice.Text.Replace("$", "").Trim()) : true) && //minprioce but not max price
+                     ((this.minPrice.Text.Length > 0 && this.maxPrice.Text.Length > 0) ? cellPhoneItem.price >= Convert.ToDouble(this.minPrice.Text.Replace("$", "").Trim()) && cellPhoneItem.price <= Convert.ToDouble(this.maxPrice.Text.Replace("$", "").Trim()) : true) && //min and max price
+                     ((this.minPrice.Text.Length < 1 && this.maxPrice.Text.Length > 0) ? cellPhoneItem.price <= Convert.ToDouble(this.maxPrice.Text.Replace("$", "").Trim()) : true)  //max price but not min price
                     
-                    orderby cellPhone.brand, cellPhone.model, cellPhone.storage, cellPhone.color, cellPhone.price ascending
+                    orderby cellPhoneItem.brand, cellPhoneItem.model, cellPhoneItem.storage, cellPhoneItem.color, cellPhoneItem.price ascending
+                    select cellPhoneItem;
 
-                // (this.brand.Text.Length > 0 ? cellPhone.brand.ToLower() == this.brand.Text.ToLower().Trim().ToString() : true ) &&
-                // (this.model.Text.Length > 0 ? cellPhone.model.ToLower() == this.model.Text.ToLower().Trim().ToString() : true ) &&
-                //(this.storage.Text.Length > 0 ? cellPhone.storage.ToLower() == this.storage.Text.ToLower().Trim().ToString() : true) &&
-                //(this.color.Text.Length > 0 ? cellPhone.color.ToLower() == this.color.Text.ToLower().Trim().ToString() : true) 
-
-                select cellPhone;
-
+              
+                //RunQuery
                 List<cellPhone> filteredPhoneList = query.ToList();
 
-                this.searchGrd.DataSource = filteredPhoneList; // phoneInventory; 
+                //BindTODataGrid
+                this.searchGrd.DataSource = filteredPhoneList; 
                 this.searchGrd.DataBind();
                 ViewState["PhoneInventorySort"] = filteredPhoneList;
 
 
                 this.searchGrd.Visible = true;
-                this.phoneCount.Text = query.Count().ToString() + " Phones found out of "+phoneInventory.Count.ToString()+" total phones carried." ;
+                this.phoneCount.Text = searchGrd.Rows.Count.ToString() + " Phones found out of "+phoneInventory.Count.ToString()+" total phones carried." ;
                 this.phoneCount.Visible = true;
 
             }

@@ -1,12 +1,7 @@
 ﻿<%@ Page Title="Search" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Search.aspx.cs" Inherits="Phones.Search" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-
-
-
      <div class="container">
         <link  REL="StyleSheet" href="Content/site.css" TYPE="text/css" /> 
-
-       
 
         <script>
             $.noConflict();
@@ -22,7 +17,16 @@
                 alert(this.value);
             }
         </script>
+
+        <asp:UpdatePanel ID="searchPgUP" runat="server">
+            <ContentTemplate>
             <h1 class="searchHeader">Search Cell Phone Inventory</h1>
+         <div class="searchInfo">
+          Please enter criteria to filter the inventory list or click search with the fields blank to return all inventory items. <br /> 
+             For more than one option, please seperate multiple  values by using a comma.  EX:  [color:  gray, red]  will return both red and gray phones.  <br />
+             To sort the data, please click on the column header to sort by that field (sorts both Ascending and Descending)  
+
+</div>
                <form role="form" class="form-inline" >
                 <div style="height:30px;"></div>
                    <div class="row">
@@ -102,7 +106,7 @@
 
                </form>
         </div>
-    <div class="container-fluid" style="padding-right:50px; padding-left:50px;">
+    <div class="searchGrdContainer container-fluid">
         <div style="padding:10px; width:100%; text-align:center; "><asp:Label ID="phoneCount" runat="server" Visible="false"></asp:Label></div>
          <asp:GridView runat="server" ID="searchGrd" 
                 DataKeyNames="brand,model,storage,color,price" 
@@ -131,4 +135,8 @@
             </asp:GridView>
 
         </div>
+
+
+    </ContentTemplate>
+            </asp:UpdatePanel>
 </asp:Content>

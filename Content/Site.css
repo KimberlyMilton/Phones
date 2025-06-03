@@ -44,10 +44,10 @@ input[type="select"] {
     .form-group label {
         font-weight: bold;
     }
-.searchHeader{
-    color:darkblue;
-    width:100%;
-    text-align:center;
+.searchHeader {
+    color: #3d5a80;
+    width: 100%;
+    text-align: center;
 }
 
 .searchBtn{
@@ -100,7 +100,7 @@ input[type="select"] {
     border-left: 0px !important;
     outline: 0px !important;
     text-align: left;
-    background-color: #3d5a80; /*green*/
+    background-color: #3d5a80; 
     color: white !important;
     padding-top: 10px !important;
     padding-bottom: 10px !important;
@@ -153,5 +153,20 @@ input[type="select"] {
 
 .nav-link {
     font-weight: bold;
-}   
+}
 
+.searchInfo
+{
+    padding-top:20px;
+    text-align:center;
+    width:100%
+}
+
+.userName{
+    color:white;
+}
+
+
+.searchGrdContainer {
+    overflow-X:auto;
+}
