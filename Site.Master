@@ -37,9 +37,9 @@
         </asp:ScriptManager>
 
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark navbarTeal">
-            <div class="container">
+            <div class="topNav container-fluid" >
                 <img src="img/mobileDevices125.png" />
-                <a class="navbar-brand" runat="server" href="~/Search" style="padding-left:20px; padding-right:100px;">Mobile Device Shop</a>
+                <a class="mobileShopNavName navbar-brand" runat="server" href="~/Search" >Mobile Device Shop</a>
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>

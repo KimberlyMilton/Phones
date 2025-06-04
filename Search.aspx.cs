@@ -21,7 +21,7 @@ namespace Phones
         {
             if (!Page.IsPostBack)
             {
-                //loadSearchGrid();
+                //loadSearchGrid(); //if the full inventory should be displayed loaded on page load.
             }
         }
 
@@ -29,8 +29,8 @@ namespace Phones
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                //  e.Row.Attributes.Add("onclick", "showPhoneInfo(" + searchGrd.DataKeys[e.Row.RowIndex].Values["PhoneID"].ToString() + ");");
-                e.Row.Attributes.Add("onclick", "showPhoneInfo("+e.Row.RowIndex+");");
+
+                e.Row.Attributes.Add("onclick", "showPhoneInfo("+e.Row.RowIndex+");"); //if data was loaded into a database (as it should be) this would pull the identity seed ID
                 e.Row.Attributes.Add("onmouseover", "this.style.cursor=\'pointer\'; this.originalstyle=this.style.backgroundColor; this.style.backgroundColor='#CEF6F5'");
                 e.Row.Attributes.Add("onmouseout", "this.style.backgroundColor = this.originalstyle");
             }
@@ -75,15 +75,14 @@ namespace Phones
             {
                 List<cellPhone> phoneInventory = importData();
 
-                //take the text entered in the boxes, and create a string list for the comma seperated values
-                
+                //take the text entered in the boxes, and create a string list from the comma seperated values
                 string[] brandsEntered =  this.brand.Text.ToLower().Replace(" ","").Trim().TrimEnd(',').TrimStart(',').Split(',');
                 string[] colorsEntered = this.color.Text.ToLower().Replace(" ", "").Trim().TrimEnd(',').TrimStart(',').Split(',');
                 string[] modelsEntered = this.model.Text.ToLower().Replace(" ", "").Trim().TrimEnd(',').TrimStart(',').Split(',');
                 string[] storagesEntered = this.storage.Text.ToLower().Replace(" ", "").Trim().TrimEnd(',').TrimStart(',').Split(',');
 
                 //Build the Query using the lists for the variables. Price will compare based on the min and max boxes entered
-                //also have to check the string length of the textbox because a string array will always have a length of 1/
+                //also have to check the string length of the textbox because a string array will always have a length of 1
                 var query = from cellPhoneItem in phoneInventory 
                      where
                       ((this.brand.Text.Trim().Length > 0 && brandsEntered.Length > 0) ? (brandsEntered.Any(wordInListEntered => cellPhoneItem.brand.ToLower().Trim().Replace(" ", "").Contains(wordInListEntered))) : true ) &&
